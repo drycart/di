@@ -1,0 +1,26 @@
+{
+    "name": "drycart/di",
+    "description": "Simple DI",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Max Mendel",
+            "email": "mendel@zzzlab.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "psr/container": "1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "drycart\\di\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "drycart\\di\\tests\\": "tests/"
+        }
+    }    
+}
