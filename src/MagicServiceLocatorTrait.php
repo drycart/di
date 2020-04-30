@@ -37,7 +37,7 @@ trait MagicServiceLocatorTrait
     protected function serviceLocator(string $id, ?array $parameters = null)
     {
         $di = Di::getInstance();
-        if(is_null($parameters)) {
+        if (is_null($parameters)) {
             return $di->get($id);
         } else {
             return $di->make($id, $parameters);
