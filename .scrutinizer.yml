@@ -1,0 +1,18 @@
+checks:
+  php:
+    code_rating: true
+    duplication: true
+
+filter:
+  excluded_paths:
+    - vendor/*
+
+before_commands:
+  - "composer install --prefer-source"
+
+tools:
+  php_code_sniffer:
+    config:
+      standard: "PSR12"
+  php_cs_fixer: true
+  sensiolabs_security_checker: true
