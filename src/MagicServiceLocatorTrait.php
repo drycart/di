@@ -32,7 +32,7 @@ trait MagicServiceLocatorTrait
      * Instantiate some service or other object using our DI
      * @param string $id
      * @param array $parameters
-     * @return type
+     * @return mixed
      */
     protected function serviceLocator(string $id, ?array $parameters = null)
     {
