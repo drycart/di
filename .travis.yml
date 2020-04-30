@@ -15,11 +15,13 @@ cache:
     - $HOME/.composer
 
 install:
-  - composer install --dev --prefer-dist
+    - composer require --dev php-coveralls/php-coveralls
+    - composer install --dev --prefer-dist
 
 script:
+  - mkdir -p build/logs
   - composer validate
   - phpunit --coverage-clover build/logs/clover.xml
-  
-after_script:
-  - php vendor/bin/coveralls -v
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls -v
