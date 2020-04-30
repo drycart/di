@@ -23,5 +23,6 @@ script:
   - composer validate
   - phpunit --coverage-clover build/logs/clover.xml
 
+
 after_success:
   - travis_retry php vendor/bin/php-coveralls -v
