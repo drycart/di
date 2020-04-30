@@ -24,13 +24,6 @@ class CallTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_a($dummy, 'drycart\di\tests\Dummy'));
     }
     
-    public function testSimpleCallString()
-    {
-        $di = new \drycart\di\Container();
-        $dummy = $di->call(['drycart\di\tests\DummyComplex', 'method'], ['i'=>null]);
-        $this->assertTrue(is_a($dummy, 'drycart\di\tests\Dummy'));
-    }
-    
     public function testFunctionCall()
     {
         $function = function(int $i) : int

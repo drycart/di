@@ -50,9 +50,6 @@ class Container extends AbstractContainer
      */
     public function call(callable $callable, array $parameters)
     {
-        if(is_array($callable) and is_string($callable[0])) {
-            $callable[0] = $this->get($callable[0]);
-        }
         $preparedParameters = $this->callableParameters($callable, $parameters);
         return call_user_func_array($callable, $preparedParameters);
     }
