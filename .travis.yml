@@ -1,22 +1,25 @@
 language: php
+
 php:
     - 7.2
     - 7.3
     - 7.4
     - nightly
-install:
-    - composer require --dev php-coveralls/php-coveralls '^2.2'
-    - composer install --prefer-dist
+
 matrix:
   allow_failures:
     - php: nightly
+
 cache:
   directories:
     - $HOME/.composer
-    
+
+install:
+  - composer install --prefer-dist
+
 script:
   - composer validate
   - phpunit --verbose || travis_terminate 1
 
-after_script:
-  - travis_retry php vendor/bin/coveralls -v 
+after_success:
+  - travis_retry php vendor/bin/coveralls -v
