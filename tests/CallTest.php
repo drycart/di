@@ -4,6 +4,7 @@
  * @license see license.txt
  */
 namespace drycart\di\tests;
+use PHPUnit\Framework\TestCase;
 
 
 /**
@@ -11,17 +12,17 @@ namespace drycart\di\tests;
  *
  * @author mendel
  */
-class CallTest extends \PHPUnit\Framework\TestCase
+class CallTest extends TestCase
 {
     public function testSimpleCall()
     {
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\DummyInterface' => ['#class'=>'drycart\di\tests\DummyComplex']
+            'drycart\di\tests\dummy\DummyInterface' => ['#class'=>'drycart\di\tests\dummy\DummyComplex']
         ]);
-        $obj = $di->get('drycart\di\tests\DummyInterface');
+        $obj = $di->get('drycart\di\tests\dummy\DummyInterface');
         $dummy = $di->call([$obj, 'method'], ['i'=>null]);
-        $this->assertTrue(is_a($dummy, 'drycart\di\tests\Dummy'));
+        $this->assertTrue(is_a($dummy, 'drycart\di\tests\dummy\Dummy'));
     }
     
     public function testFunctionCall()

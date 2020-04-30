@@ -4,67 +4,67 @@
  * @license see license.txt
  */
 namespace drycart\di\tests;
-
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of DiTest
  *
  * @author mendel
  */
-class ExtendedTest extends \PHPUnit\Framework\TestCase
+class ExtendedTest extends TestCase
 {
     public function testMake()
     {
         $di = new \drycart\di\Container();
-        $obj = $di->make('drycart\di\tests\DummyPlusParameter', ['intDummy'=> 0]);
-        $this->assertTrue(is_a($obj, 'drycart\di\tests\DummyPlusParameter'));
+        $obj = $di->make('drycart\di\tests\dummy\DummyPlusParameter', ['intDummy'=> 0]);
+        $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyPlusParameter'));
     }
     
     public function testMakeException()
     {
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\Dummy' => [
+            'drycart\di\tests\dummy\Dummy' => [
                 '#singleton' => true
             ]
         ]);
         $this->expectException(\drycart\di\ContainerException::class);
-        $this->expectExceptionMessage('drycart\di\tests\Dummy is singlton!');
-        $di->make('drycart\di\tests\Dummy');
+        $this->expectExceptionMessage('drycart\di\tests\dummy\Dummy is singlton!');
+        $di->make('drycart\di\tests\dummy\Dummy');
     }
     
     public function testMakeParamsNoType()
     {
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\DummyInterface' => [
-                '#class'=>'drycart\di\tests\DummyComplex',
+            'drycart\di\tests\dummy\DummyInterface' => [
+                '#class'=>'drycart\di\tests\dummy\DummyComplex',
                 'noTypeParameter' => 5
             ]
         ]);
-        $obj = $di->get('drycart\di\tests\DummyInterface');
-        $this->assertTrue(is_a($obj, 'drycart\di\tests\DummyInterface'));
+        $obj = $di->get('drycart\di\tests\dummy\DummyInterface');
+        $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyInterface'));
     }
     
     public function testMakePreparedParameters()
     {
         $di = new \drycart\di\Container();
-        $dummy = $di->get('drycart\di\tests\Dummy');
-        $obj = $di->make('drycart\di\tests\DummyPlusParameter', [
+        $dummy = $di->get('drycart\di\tests\dummy\Dummy');
+        $obj = $di->make('drycart\di\tests\dummy\DummyPlusParameter', [
             'intDummy'=> 0,
             'dummy'=>$dummy
         ]);
-        $this->assertTrue(is_a($obj, 'drycart\di\tests\DummyPlusParameter'));
+        $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyPlusParameter'));
     }
     
     public function testMakeFromArrayParameter()
     {
         $di = new \drycart\di\Container();
-        $obj = $di->make('drycart\di\tests\DummyPlusParameter', [
+        $obj = $di->make('drycart\di\tests\dummy\DummyPlusParameter', [
             'intDummy'=> 0,
-            'dummy'=>['#class'=>'drycart\di\tests\Dummy']
+            'dummy'=>['#class'=>'drycart\di\tests\dummy\Dummy']
         ]);
-        $this->assertTrue(is_a($obj, 'drycart\di\tests\DummyPlusParameter'));
+        $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyPlusParameter'));
     }
     
     public function testTransformer()
@@ -73,23 +73,23 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $di->addTransformer(function($value, string $className, \drycart\di\DiInterface $container) {
             return $container->get($className);
         });
-        $obj = $di->make('drycart\di\tests\DummyPlusParameter', [
+        $obj = $di->make('drycart\di\tests\dummy\DummyPlusParameter', [
             'intDummy'=> 0,
             'dummy'=> new \stdClass()
         ]);
-        $this->assertTrue(is_a($obj, 'drycart\di\tests\DummyPlusParameter'));
+        $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyPlusParameter'));
     }
     
     public function testParent()
     {
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\Dummy' => [
+            'drycart\di\tests\dummy\Dummy' => [
                 '#singleton' => true
             ]
         ]);
-        $obj = $di->singleton('drycart\di\tests\DummyExtended');
-        $this->assertTrue(is_a($obj, 'drycart\di\tests\DummyExtended'));
+        $obj = $di->singleton('drycart\di\tests\dummy\DummyExtended');
+        $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyExtended'));
     }
     
     public function testFactory1()
@@ -114,15 +114,15 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     public function testFactory2()
     {
         $di = new \drycart\di\Container();
-        $di->addClass(\drycart\di\tests\Dummy::class, [
+        $di->addClass(\drycart\di\tests\dummy\Dummy::class, [
             '#factory' => function($config, $container) {
             $className = $config['#class'];
             $obj = new $className;
             $obj->meta = 'meta';
             return $obj;
         }]);
-        $obj = $di->make('drycart\di\tests\DummyExtended');
-        $this->assertTrue(is_a($obj, 'drycart\di\tests\DummyExtended'));
+        $obj = $di->make('drycart\di\tests\dummy\DummyExtended');
+        $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyExtended'));
         $this->assertEquals($obj->meta, 'meta');
     }
     
@@ -131,7 +131,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $di = new \drycart\di\Container();
         $this->expectException(\drycart\di\ContainerException::class);
         $this->expectExceptionMessage('Wrong type of value for parameter');
-        $di->make('drycart\di\tests\DummyPlusParameter', [
+        $di->make('drycart\di\tests\dummy\DummyPlusParameter', [
             'intDummy'=> 0,
             'dummy'=> new \stdClass()
         ]);
@@ -141,40 +141,40 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     {
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\Dummy' => [
+            'drycart\di\tests\dummy\Dummy' => [
                 '#singleton' => false
             ]
         ]);
         $this->expectException(\drycart\di\ContainerException::class);
-        $this->expectExceptionMessage('drycart\di\tests\Dummy NOT singlton!');
-        $di->singleton('drycart\di\tests\Dummy');
+        $this->expectExceptionMessage('drycart\di\tests\dummy\Dummy NOT singlton!');
+        $di->singleton('drycart\di\tests\dummy\Dummy');
     }
     
     public function testMakeConfig()
     {
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\DummyMakeConfig' => [
+            'drycart\di\tests\dummy\DummyMakeConfig' => [
                 'dummy' => ['i'=>5],
                 'intDummy'=> 5
             ],
-            'drycart\di\tests\DummyInterface' => [
-                '#class'=>'drycart\di\tests\DummyToMake'
+            'drycart\di\tests\dummy\DummyInterface' => [
+                '#class'=>'drycart\di\tests\dummy\DummyToMake'
             ]
         ]);
-        $obj = $di->get('drycart\di\tests\DummyMakeConfig');
-        $this->assertTrue(is_a($obj->dummy, 'drycart\di\tests\DummyToMake'));
+        $obj = $di->get('drycart\di\tests\dummy\DummyMakeConfig');
+        $this->assertTrue(is_a($obj->dummy, 'drycart\di\tests\dummy\DummyToMake'));
     }
     public function testService()
     {
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\Dummy' => [
+            'drycart\di\tests\dummy\Dummy' => [
                 '#singleton' => true
             ]
         ]);
-        $obj1 = $di->singleton('drycart\di\tests\Dummy');
-        $obj2 = $di->get('drycart\di\tests\Dummy');
+        $obj1 = $di->singleton('drycart\di\tests\dummy\Dummy');
+        $obj2 = $di->get('drycart\di\tests\dummy\Dummy');
         $this->assertEquals(spl_object_id($obj1), spl_object_id($obj2));
     }
     
@@ -203,18 +203,18 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(defined('DI_REQUIRED_TEST_CONST'));
         $di = new \drycart\di\Container();
         $di->setConfig([
-            'drycart\di\tests\DummyInterface' => [
-                '#class'=>'drycart\di\tests\DummyServiceProvider',
+            'drycart\di\tests\dummy\DummyInterface' => [
+                '#class'=>'drycart\di\tests\dummy\DummyServiceProvider',
                 '#singleton' => true,
                 'answer' => 42
             ],
-            'drycart\di\tests\Dummy' => [
+            'drycart\di\tests\dummy\Dummy' => [
                 '#required'=> [
-                    'drycart\di\tests\DummyInterface'
+                    'drycart\di\tests\dummy\DummyInterface'
                 ]
             ]
         ]);
-        $di->get('drycart\di\tests\Dummy');
+        $di->get('drycart\di\tests\dummy\Dummy');
         $this->assertTrue(defined('DI_REQUIRED_TEST_CONST'));
         $this->assertEquals(DI_REQUIRED_TEST_CONST, 42);
     }

@@ -4,7 +4,7 @@
  * @license see license.txt
  */
 
-namespace drycart\di\tests;
+namespace drycart\di\tests\dummy;
 use drycart\di\MagicStoreTrait;
 
 /**

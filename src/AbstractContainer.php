@@ -138,7 +138,7 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
      * Prepare parameters for callable (add dependency)
      * @param callable $callable
      * @param array $parameters assoc array of parameters
-     * @return array prepared parameters, can by used for call_user_func_array etc
+     * @return array prepared parameters
      */
     protected function callableParameters(callable $callable, array $parameters) : array
     {
@@ -149,6 +149,10 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
     private $reflectionCache = [];
     private function getClassDependency(string $className) : array
     {
+        if(!class_exists($className)) {
+            // Not NotFoundException => it is missconfiguration, i.e. wrong class at config
+            throw new ContainerException('Class need to instantiate not exist '.$className);
+        }
         if(!isset($this->reflectionCache[$className])) {
             $reflector = new \ReflectionClass($className);
             $constructor = $reflector->getConstructor();
