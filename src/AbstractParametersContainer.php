@@ -27,10 +27,10 @@ abstract class AbstractParametersContainer
     protected function prepareParameters(array $dependency, array $parameters) : array
     {
         $preparedParameters = [];
-        foreach($dependency as $paramReflector) {
+        foreach ($dependency as $paramReflector) {
             $name = $paramReflector->name;
             $type = $paramReflector->getType();
-            if(isset($parameters[$name])) {
+            if (isset($parameters[$name])) {
                 $value = $parameters[$name];
                 $preparedParameters[] = $this->prepareValue($type, $value);
             } else {
@@ -42,9 +42,9 @@ abstract class AbstractParametersContainer
     
     private function prepareValue($type, $value)
     {
-        if(empty($type) or $type->isBuiltIn() or is_a($value, $type->getName())) {
+        if (empty($type) or $type->isBuiltIn() or is_a($value, $type->getName())) {
             return $value;
-        } elseif(is_array($value)) {
+        } elseif (is_array($value)) {
             $className = $value['#class'] ?? $type->getName();
             return $this->make($className, $value);
         } else {
@@ -60,22 +60,22 @@ abstract class AbstractParametersContainer
     private function getParameter(\ReflectionParameter $param)
     {
         $type = $param->getType();
-        if(!empty($type) and !$type->isBuiltIn()) {
+        if (!empty($type) and !$type->isBuiltIn()) {
             return $this->get($type->getName());
-        } elseif($param->isDefaultValueAvailable()) {
+        } elseif ($param->isDefaultValueAvailable()) {
             return $param->getDefaultValue();
-        }elseif($type->allowsNull()) {
+        }elseif ($type->allowsNull()) {
             return null;
         } else {
-            throw new ContainerException('Unknown parameter '. $param->name);
+            throw new ContainerException('Unknown parameter '.$param->name);
         }
     }
 
     private function tryTransformValue(string $className, $value)
     {
-        foreach($this->transformers as $transformer) {
+        foreach ($this->transformers as $transformer) {
             $value = $transformer($value, $className, $this);
-            if(is_a($value, $className)) {
+            if (is_a($value, $className)) {
                 return $value;
             }
         }
