@@ -16,7 +16,7 @@ cache:
     
 script:
   - composer validate
-  - vendor/bin/phpunit --verbose || travis_terminate 1
+  - phpunit --verbose || travis_terminate 1
 
 after_script:
   - travis_retry php vendor/bin/coveralls -v 
