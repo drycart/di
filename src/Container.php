@@ -67,6 +67,9 @@ class Container extends AbstractContainer
     public function get($id)
     {
         $config = $this->classConfig($id);
+        if(is_null($config)) {
+            throw new NotFoundException();
+        }
         //
         if($config['#singleton']) {
             return $this->internalSingleton($id, $config);
@@ -85,6 +88,9 @@ class Container extends AbstractContainer
     public function make(string $id, array $parameters = [])
     {
         $config = $this->classConfig($id);
+        if(is_null($config)) {
+            throw new NotFoundException();
+        }
         //
         if($config['#singleton']) {
             throw new ContainerException($id. ' is singlton!');
@@ -102,6 +108,9 @@ class Container extends AbstractContainer
     public function singleton(string $id)
     {
         $config = $this->classConfig($id);
+        if(is_null($config)) {
+            throw new NotFoundException();
+        }
         //
         if(!$config['#singleton']) {
             throw new ContainerException($id. ' NOT singlton!');

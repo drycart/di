@@ -109,7 +109,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $di->setConfig([
             'drycart\di\tests\DummyInterface' => ['#class'=>'drycart\di\tests\DummyComplex']
         ]);
-        for ($i=0;$i<10000;$i++) {
+        for ($i=0;$i<1000;$i++) {
             $obj = $di->make('drycart\di\tests\DummyInterface', ['intDummy'=>$i]);
 //            $obj = new DummyComplex($i, null);
         }
@@ -123,7 +123,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             'stdClass' => ['#class'=>'stdClass']
         ]);
         $className = 'stdClass';
-        for ($i=0;$i<100000;$i++) {
+        for ($i=0;$i<10000;$i++) {
             $obj = $di->get($className);
 //            $obj = new $className;
         }

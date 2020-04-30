@@ -76,7 +76,7 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
      * @param array $config
      * @return mixed
      */
-    protected function internalSingleton($id, ?array $config)
+    protected function internalSingleton($id, array $config)
     {
         if(!isset($this->storage[$id])) {
             $this->storage[$id] = $this->internalMake($id, $config);
@@ -92,11 +92,8 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
      * @return mixed
      * @throws ContainerException
      */
-    protected function internalMake($id, ?array $config, array $parameters = [])
+    protected function internalMake($id, array $config, array $parameters = [])
     {
-        if(is_null($config)) {
-            throw new NotFoundException();
-        }
         $fullParameters = array_merge($parameters, $config);
         $obj = $this->getObject($fullParameters);
         //
