@@ -54,13 +54,9 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
         }
         $config = [];
         if (!$this->isAlias($id)) {
-            foreach (array_reverse(class_parents($id)) as $parent) {
-                $config = array_merge($config, $this->config[$parent] ?? []);
-            }
+            $config = $this->tryAddParentConfig($id, $config);
         } elseif (isset($this->config[$id]['#class'])) {
-            foreach (array_reverse(class_parents($this->config[$id]['#class'])) as $parent) {
-                $config = array_merge($config, $this->config[$parent] ?? []);
-            }
+            $config = $this->tryAddParentConfig($this->config[$id]['#class'], $config);
         }
         $config = array_merge($config, $this->config[$id] ?? []);
         //
@@ -70,6 +66,14 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
         //
         if (!isset($config['#singleton'])) {
             $config['#singleton'] = false;
+        }
+        return $config;
+    }
+    
+    protected function tryAddParentConfig(string $id, array $config) : array 
+    {
+        foreach (array_reverse(class_parents($id)) as $parent) {
+            $config = array_merge($config, $this->config[$parent] ?? []);
         }
         return $config;
     }
