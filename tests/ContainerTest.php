@@ -110,7 +110,7 @@ class ContainerTest extends TestCase
         $di->setConfig([
             'drycart\di\tests\dummy\DummyInterface' => ['#class'=>'drycart\di\tests\dummy\DummyComplex']
         ]);
-        for ($i=0;$i<1000;$i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $obj = $di->make('drycart\di\tests\dummy\DummyInterface', ['intDummy'=>$i]);
 //            $obj = new DummyComplex($i, null);
         }
@@ -124,7 +124,7 @@ class ContainerTest extends TestCase
             'stdClass' => ['#class'=>'stdClass']
         ]);
         $className = 'stdClass';
-        for ($i=0;$i<10000;$i++) {
+        for ($i = 0; $i < 10000; $i++) {
             $obj = $di->get($className);
 //            $obj = new $className;
         }

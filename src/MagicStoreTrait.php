@@ -27,7 +27,7 @@ trait MagicStoreTrait
      */
     protected function _store(array $data, ?array $keys = null) : void
     {
-        foreach($keys ?? array_keys($data) as $key) {
+        foreach ($keys ?? array_keys($data) as $key) {
             $this->$key = $data[$key] ?? null;
         }
     }    

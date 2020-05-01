@@ -15,7 +15,7 @@ class DummyServiceProvider implements DummyInterface
 {
     public function __construct(int $answer)
     {
-        if(!defined('DI_REQUIRED_TEST_CONST')) {
+        if (!defined('DI_REQUIRED_TEST_CONST')) {
             define('DI_REQUIRED_TEST_CONST', $answer);
         }
     }

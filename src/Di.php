@@ -23,7 +23,7 @@ class Di
 
     public static function getInstance() : DiInterface
     {
-        if(is_null(self::$instance)) {
+        if (is_null(self::$instance)) {
             self::$instance = new Container();
         }
         return self::$instance;
