@@ -24,23 +24,27 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
      */
     private $storage = [];
     
-    private $chachedConfig = [];
+    private $cachedConfig = [];
         
     /**
      * Get prepared config for selected class
      * Add default value for system fields if empty
-     * @param string $id
+     * @param string $id 
+     * @param bool $required need check if exist, and throw if not
      * @return array
      */
-    protected function classConfig(string $id) : ?array
+    protected function classConfig(string $id, bool $required = false) : ?array
     {
-        if(!isset($this->chachedConfig[$id])) {
+        if(!isset($this->cachedConfig[$id])) {
             $config = $this->internalConfig($id);
             $this->initRequired($config['#required'] ?? []);
             unset($config['#required']);
-            $this->chachedConfig[$id] = $config;
+            $this->cachedConfig[$id] = $config;
         }
-        return $this->chachedConfig[$id];
+        if($required and is_null($this->cachedConfig[$id])) {
+            throw new NotFoundException('Not exist class: '.$id);
+        }
+        return $this->cachedConfig[$id];
     }
     
     protected function internalConfig(string $id) : ?array
