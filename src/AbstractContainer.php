@@ -52,30 +52,33 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
         if (!isset($this->config[$id]) and !class_exists($id)) {
             return null;
         }
-        $config = [];
-        if (!$this->isAlias($id)) {
-            $config = $this->tryAddParentConfig($id, $config);
-        } elseif (isset($this->config[$id]['#class'])) {
-            $config = $this->tryAddParentConfig($this->config[$id]['#class'], $config);
-        }
-        $config = array_merge($config, $this->config[$id] ?? []);
+        $parentConfig = $this->getParentConfig($id);
         //
-        if (empty($config['#class'])) {
-            $config['#class'] = $id;
+        $currentConfig = $this->config[$id] ?? [];
+        if (empty($currentConfig['#class']) and !$this->isAlias($id)) {
+            $currentConfig['#class'] = $id;
         }
         //
+        $config = array_merge($parentConfig, $currentConfig);
         if (!isset($config['#singleton'])) {
             $config['#singleton'] = false;
         }
         return $config;
     }
     
-    protected function tryAddParentConfig(string $id, array $config) : array 
+    protected function getParentConfig(string $id) : array 
     {
-        foreach (array_reverse(class_parents($id)) as $parent) {
-            $config = array_merge($config, $this->config[$parent] ?? []);
+        if ($this->isAlias($id)) {
+            $parentId = $this->getAliaseParent($id);
+        } else {
+            $parents = class_parents($id);
+            $parentId = reset($parents);
         }
-        return $config;
+        //
+        if(!is_string($parentId)) {
+            return [];
+        }
+        return $this->internalConfig($parentId);
     }
 
     /**
@@ -114,6 +117,15 @@ abstract class AbstractContainer extends AbstractParametersContainer implements 
     protected function isAlias(string $id) : bool
     {
         return (substr($id, 0, 1) == '#');
+    }
+    
+    protected function getAliaseParent(string $id) : ?string
+    {
+        $parts = explode(':', $id, 2);
+        if(count($parts) == 1) {
+            return null;
+        }
+        return $parts[0];
     }
     
     protected function initRequired(array $requirement) : void

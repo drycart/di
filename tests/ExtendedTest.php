@@ -92,6 +92,17 @@ class ExtendedTest extends TestCase
         $this->assertTrue(is_a($obj, 'drycart\di\tests\dummy\DummyExtended'));
     }
     
+    public function testParentAlias()
+    {
+        $di = new \drycart\di\Container();
+        $di->setConfig([
+            '#other' => ['#class'=>'stdClass'],
+            '#other:children' => []
+        ]);
+        $obj = $di->get('#other:children');
+        $this->assertTrue(is_a($obj, 'stdClass'));
+    }
+    
     public function testFactory1()
     {
         $di = new \drycart\di\Container();
